@@ -1,93 +1,60 @@
 import React, { useState } from "react";
-import { movies } from "./data";
+import { movies } from "./data"; // Assuming your data file is in the same directory
+import "./Movie.css"; // Import the CSS file
 
 const Movie = () => {
   const [movieList, setMovieList] = useState(movies);
 
-  const filtered = (cat) => {
-    console.log(cat);
-    setMovieList(movies.filter((data) => data.category == cat));
+  // An array of categories to generate buttons dynamically
+  const categories = [
+    "All",
+    "Action",
+    "Thriller",
+    "Animation",
+    "Horror",
+    "Drama",
+  ];
+
+  const filterMovies = (category) => {
+    if (category === "All") {
+      setMovieList(movies);
+    } else {
+      setMovieList(movies.filter((movie) => movie.category === category));
+    }
   };
 
   return (
-    <>
-      <div className="my-3 mx-auto " style={{ textAlign: "center" }}>
-        <button
-          onClick={() => setMovieList(movies)}
-          type="button"
-          className="btn btn-outline-primary mx-3"
-        >
-          All
-        </button>
-        <button
-          onClick={() => filtered("Action")}
-          type="button"
-          className="btn btn-outline-secondary mx-3"
-        >
-          Action
-        </button>
-        <button
-          onClick={() => filtered("Thriller")}
-          type="button"
-          className="btn btn-outline-success mx-3"
-        >
-          Thriller
-        </button>
-        <button
-          onClick={() => filtered("Animation")}
-          type="button"
-          className="btn btn-outline-danger mx-3"
-        >
-          Animation
-        </button>
-        <button
-          onClick={() => filtered("Horror")}
-          type="button"
-          className="btn btn-outline-warning mx-3"
-        >
-          Horror
-        </button>
-        <button
-          onClick={() => filtered("Drama")}
-          type="button"
-          className="btn btn-outline-light mx-3"
-        >
-          Drama
-        </button>
+    <div className="movie-container">
+      {/* Filter Buttons */}
+      <div className="filter-buttons">
+        {categories.map((category) => (
+          <button
+            key={category}
+            onClick={() => filterMovies(category)}
+            className="filter-btn"
+          >
+            {category}
+          </button>
+        ))}
       </div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexWrap: "wrap",
-          // gap: "2rem",
-          textAlign: "center",
-          width: " 1300px",
-          // backgroundColor: "rebeccapurple",
-          margin: "auto",
-          marginTop: "20px",
-        }}
-      >
-        {movieList.map((data) => (
-          <div key={data.id} style={{ maxWidth: "350px" }}>
-            <div className="hover_effect">
-              <img
-                style={{
-                  width: "200px",
-                  border: " 1px solid yellow",
-                  borderRadius: "10px",
-                }}
-                src={data.poster_path}
-                alt="movie"
-              />
+
+      {/* Movie Grid */}
+      <div className="movie-grid">
+        {movieList.map((movie) => (
+          <div key={movie.id} className="movie-card">
+            <img
+              className="movie-poster"
+              src={movie.poster_path}
+              alt={movie.title}
+            />
+            <div className="movie-info">
+              <h3 className="movie-title">{movie.title}</h3>
+              <p className="movie-release-date">{movie.release_date}</p>
             </div>
-            <h3>{data.title}</h3>
-            <h4>{data.release_date}</h4>
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
